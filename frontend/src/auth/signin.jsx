@@ -1,0 +1,167 @@
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { auth } from "../configuration/firebase";
+import {
+  signInWithEmailAndPassword,
+  signOut,
+  sendEmailVerification,
+  GoogleAuthProvider,
+  signInWithPopup
+} from "firebase/auth";
+import Logo from "../assets/vite.svg";
+import GoogleIcon from "../assets/google.svg";
+import { ToastContainer, toast } from "react-toastify";
+import PulseLoader from "react-spinners/PulseLoader";
+
+function Signin() {
+  const [value, setValue] = useState({
+    email: "",
+    password: "",
+  });
+  const [isSubmit, setIsSubmit] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setIsSubmit(true);
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        value.email,
+        value.password
+      );
+
+      const user = userCredential.user;
+
+      if (!user.emailVerified) {
+        await sendEmailVerification(user);
+        await signOut(auth);
+        toast.error(
+          "Please verify your email before logging in. We've sent you a verification email."
+        );
+        setIsSubmit(false);
+        setValue({
+          email: "",
+          password: "",
+        });
+        return;
+      } else {
+        navigate("/", { replace: true });
+      }
+
+      setIsSubmit(false);
+    } catch (err) {
+      toast.error(String(err.message));
+      setIsSubmit(false);
+    }
+  };
+
+  const handleGoogleSignup = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      const token = await user.getIdToken();
+      console.log("Token:", token);
+      navigate("/", { replace: true });
+    } catch (error) {
+      console.error(error);
+      toast.error(error.message);
+    }
+  };
+
+  return (
+    <div className="flex justify-center items-center min-h-screen bg-white text-black">
+      <ToastContainer />
+      <form
+        onSubmit={handleLogin}
+        className="flex flex-col gap-5 justify-center items-center p-4 w-72"
+      >
+        <div>
+          <img src={Logo} alt="Logo" className="w-24 h-24 rounded-lg" />
+        </div>
+
+        <div className="flex flex-col gap-5 w-full">
+          <input
+            type="email"
+            name="email"
+            required
+            value={value.email}
+            onChange={(e) =>
+              setValue({
+                ...value,
+                email: e.target.value,
+              })
+            }
+            placeholder="Enter your email"
+            className="px-4 py-3 bg-white border-2 border-neutral-300 rounded-lg placeholder-neutral-500 focus:outline-none focus:border-neutral-500"
+          />
+          <input
+            type="password"
+            name="password"
+            required
+            value={value.password}
+            onChange={(e) =>
+              setValue({
+                ...value,
+                password: e.target.value,
+              })
+            }
+            placeholder="Enter your password"
+            className="px-4 py-3 bg-white border-2 border-neutral-300 rounded-lg placeholder-neutral-500 focus:outline-none focus:border-neutral-500"
+          />
+          <Link
+            to="/forgot-password"
+            className="text-black hover:text-neutral-500 text-sm text-left"
+          >
+            Forgot password
+          </Link>
+
+          <button
+            type="submit"
+            disabled={isSubmit}
+            className={`flex justify-center items-center text-center rounded-lg px-4 py-4 w-full h-12 ${
+              isSubmit
+                ? "bg-neutral-300 cursor-not-allowed text-black"
+                : "bg-black text-white hover:bg-neutral-800"
+            }`}
+          >
+            {isSubmit ? (
+              <PulseLoader size={8} color="#ffffff" />
+            ) : (
+              "Login"
+            )}
+          </button>
+        </div>
+
+        <img
+          src={GoogleIcon}
+          alt="Sign in with Google"
+          onClick={handleGoogleSignup}
+          className="w-8 h-8 cursor-pointer hover:scale-105 transition-transform"
+        />
+
+        <div className="text-center text-sm text-neutral-600 flex flex-col gap-1">
+          <p>
+            Don't have an account?{" "}
+            <Link to="/signup" className="text-black hover:text-neutral-600">
+              Sign up
+            </Link>
+          </p>
+          <p>
+            <Link to="/" className="text-black hover:text-neutral-600">
+              Terms of Use
+            </Link>{" "}
+            |{" "}
+            <Link to="/" className="text-black hover:text-neutral-600">
+              Privacy Policy
+            </Link>
+          </p>
+        </div>
+      </form>
+    </div>
+  );
+}
+
+export default Signin;
