@@ -64,7 +64,7 @@ function App() {
   if (loading || routeLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-white">
-        <ScaleLoader color="black" />
+        <ScaleLoader color="#059669" />
       </div>
     );
   }

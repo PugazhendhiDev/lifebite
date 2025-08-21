@@ -16,9 +16,7 @@ function Home() {
   ];
 
   return (
-    <div className="w-full min-h-screen mb-20 py-10 flex flex-col justify-center items-center
-                bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200
-                bg-[length:200%_200%] animate-pulse">
+    <div className="w-full min-h-screen mb-20 py-10 flex flex-col justify-center items-center">
       {/* Profile Card */}
       <div className="w-72 md:w-80 bg-white p-6 rounded-2xl shadow-md flex flex-col items-center gap-4">
         <div className="w-28 h-28 rounded-full overflow-hidden flex justify-center items-center border-2 border-gray-300">
@@ -30,7 +28,7 @@ function Home() {
               onError={() => setProfileError(true)}
             />
           ) : (
-            <CircleUserRound size={100} className="text-gray-400 m-auto" />
+            <CircleUserRound size={100} className="text-gray-400 m-auto" color="#059669" />
           )}
         </div>
         <h2 className="text-xl text-center font-semibold">{user.displayName || "Donor Name"}</h2>

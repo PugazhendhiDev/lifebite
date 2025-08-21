@@ -199,7 +199,7 @@ function DonateFood() {
                 <button
                   type="button"
                   onClick={useGPS}
-                  className="flex items-center gap-1 bg-blue-500 text-white px-3 py-1 rounded-md text-sm hover:bg-blue-600 relative z-20"
+                  className="flex items-center gap-1 bg-emerald-600 text-white px-3 py-1 rounded-md text-sm hover:bg-emerald-700 relative z-20"
                 >
                   <MapPin className="h-4 w-4" /> Use GPS
                 </button>
