@@ -17,6 +17,7 @@ function Signup() {
     email: "",
     password: "",
     retypePassword: "",
+    userType: "Donor", // default
   });
   const [isSubmit, setIsSubmit] = useState(false);
   const navigate = useNavigate();
@@ -35,6 +36,7 @@ function Signup() {
       setIsSubmit(false);
       return;
     }
+
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
@@ -42,11 +44,16 @@ function Signup() {
         value.password
       );
       await sendEmailVerification(userCredential.user);
+
+      // Save userType to localStorage
+      localStorage.setItem("userType", value.userType);
+
       setIsSubmit(false);
       setValue({
         email: "",
         password: "",
         retypePassword: "",
+        userType: "Donor",
       });
       navigate("/email-sent", { replace: true });
     } catch (err) {
@@ -62,6 +69,10 @@ function Signup() {
       const user = result.user;
       const token = await user.getIdToken();
       console.log("Token:", token);
+
+      // Save userType to localStorage if needed
+      localStorage.setItem("userType", value.userType);
+
       navigate("/", { replace: true });
     } catch (error) {
       console.error(error);
@@ -81,6 +92,19 @@ function Signup() {
         </div>
 
         <div className="flex flex-col gap-5 w-full">
+          {/* User Type Dropdown */}
+          <select
+            value={value.userType}
+            onChange={(e) =>
+              setValue({ ...value, userType: e.target.value })
+            }
+            className="px-4 py-3 border-2 border-neutral-300 rounded-lg bg-white focus:outline-none focus:border-neutral-500"
+          >
+            <option value="Donor">Donor</option>
+            <option value="NGO">NGO</option>
+            <option value="Pickup Person">Pickup Person</option>
+          </select>
+
           <input
             type="email"
             name="email"

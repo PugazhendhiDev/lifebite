@@ -21,7 +21,7 @@ function Profile() {
         <>
             <ToastContainer />
             <div className="w-full h-screen flex flex-col gap-4 justify-center items-center pt-10 p-4">
-                {user.photoURL && !profileError ? <img className="w-32 h-32 border-2 border-white rounded-full" src={user.photoURL} onError={setProfileError(true)} /> : <CircleUserRound className="w-32 h-32" color="#059669" />}
+                {user.photoURL && !profileError ? <img className="w-32 h-32 border-2 border-white rounded-full" src={user.photoURL} onError={() => setProfileError(true)} /> : <CircleUserRound className="w-32 h-32" color="#059669" />}
                 <h1>{user.displayName}</h1>
                 <p className="text-neutral-400">{user.email}</p>
                 <div

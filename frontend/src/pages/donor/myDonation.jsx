@@ -91,63 +91,67 @@ function MyDonation() {
   ];
 
   return (
-    <div className="p-6 bg-gray-50 mb-20 min-h-screen">
-      <h1 className="text-3xl font-bold mb-6">My Donations</h1>
+    <div className="w-full min-h-screen bg-white py-10 mb-20 flex flex-col items-center">
+      <div className="w-full max-w-5xl px-6 mb-8">
+        <h1 className="text-3xl font-bold text-gray-800">My Donations</h1>
+      </div>
 
-      {donations.length === 0 ? (
-        <p className="text-gray-600">You have not posted any donations yet.</p>
-      ) : (
-        <div className="grid md:grid-cols-2 gap-6">
-          {donations.map((donation) => (
-            <div
-              key={donation.id}
-              className="bg-white p-6 rounded-xl shadow-lg flex flex-col gap-3"
-            >
-              <div className="flex justify-between items-center">
-                <span className="font-semibold text-lg">{donation.foodType}</span>
-                <span className="text-sm text-gray-500">{donation.quantity}</span>
-              </div>
+      <div className="w-full max-w-5xl px-6">
+        {donations.length === 0 ? (
+          <p className="text-gray-600">You have not posted any donations yet.</p>
+        ) : (
+          <div className="grid md:grid-cols-2 gap-6">
+            {donations.map((donation) => (
+              <div
+                key={donation.id}
+                className="bg-white p-6 rounded-xl shadow-lg flex flex-col gap-3"
+              >
+                <div className="flex justify-between items-center">
+                  <span className="font-semibold text-lg">{donation.foodType}</span>
+                  <span className="text-sm text-gray-500">{donation.quantity}</span>
+                </div>
 
-              <div>
-                <span className="font-medium text-sm">Allergens:</span>{" "}
-                {donation.allergens.length > 0
-                  ? donation.allergens.join(", ")
-                  : "None"}
-              </div>
+                <div>
+                  <span className="font-medium text-sm">Allergens:</span>{" "}
+                  {donation.allergens.length > 0
+                    ? donation.allergens.join(", ")
+                    : "None"}
+                </div>
 
-              <div className="flex justify-between text-sm text-gray-600">
-                <span>Prepared at: {donation.preparedAt}</span>
-                <span>Best before: {donation.bestBefore}</span>
-              </div>
+                <div className="flex justify-between text-sm text-gray-600">
+                  <span>Prepared at: {donation.preparedAt}</span>
+                  <span>Best before: {donation.bestBefore}</span>
+                </div>
 
-              <div>
-                <span className="font-medium text-sm">Pickup Address:</span>
-                <p className="text-gray-700">{donation.pickupAddress}</p>
-                <div className="flex items-center gap-1 text-gray-600 text-sm mt-1">
-                  <MapPin className="h-4 w-4 text-red-500" />
-                  <span>
-                    {donation.address} (Lat: {donation.latitude.toFixed(4)}, Lon:{" "}
-                    {donation.longitude.toFixed(4)})
-                  </span>
+                <div>
+                  <span className="font-medium text-sm">Pickup Address:</span>
+                  <p className="text-gray-700">{donation.pickupAddress}</p>
+                  <div className="flex items-center gap-1 text-gray-600 text-sm mt-1">
+                    <MapPin className="h-4 w-4 text-red-500" />
+                    <span>
+                      {donation.address} (Lat: {donation.latitude.toFixed(4)}, Lon:{" "}
+                      {donation.longitude.toFixed(4)})
+                    </span>
+                  </div>
+                </div>
+
+                {donation.photo && (
+                  <img
+                    src={URL.createObjectURL(donation.photo)}
+                    alt="donation"
+                    className="w-full h-40 object-cover rounded-lg"
+                  />
+                )}
+
+                <div className="flex items-center gap-2 mt-2 text-sm">
+                  <Star className="h-4 w-4 text-amber-500" />
+                  <span>{donation.peopleFed} people fed</span>
                 </div>
               </div>
-
-              {donation.photo && (
-                <img
-                  src={URL.createObjectURL(donation.photo)}
-                  alt="donation"
-                  className="w-full h-40 object-cover rounded-lg"
-                />
-              )}
-
-              <div className="flex items-center gap-2 mt-2 text-sm">
-                <Star className="h-4 w-4 text-amber-500" />
-                <span>{donation.peopleFed} people fed</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

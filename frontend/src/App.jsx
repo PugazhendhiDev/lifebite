@@ -12,14 +12,24 @@ import ResetPassword from "./auth/resetPassword";
 import EmailSent from "./auth/emailSent";
 import Navbar from "./components/navbar";
 
-import Home from "./pages/donor/home";
 import Intro from "./pages/intro";
+
+import Home from "./pages/donor/home";
 import Profile from "./pages/donor/profile";
 import DonateFood from "./pages/donor/donateFood";
 import MyDonation from "./pages/donor/myDonation";
 
+import NgoHome from "./pages/ngo/home";
+import SearchFood from "./pages/ngo/searchFood";
+import TrackRequest from "./pages/ngo/trackRequest";
+
+import PickupHome from "./pages/pickup/home";
+import PickupRequest from "./pages/pickup/pickupRequest";
+import DeliveryHistory from "./pages/pickup/deliveryHistory";
+
 function App() {
   const [user, setUser] = useState(null);
+  const [userType, setUserType] = useState(null);
   const [loading, setLoading] = useState(true);
   const [routeLoading, setRouteLoading] = useState(true);
   const location = useLocation();
@@ -56,6 +66,14 @@ function App() {
   }, [location]);
 
   useEffect(() => {
+    const userType = localStorage.getItem("userType");
+
+    if (userType) {
+      setUserType(userType);
+    }
+  }, []);
+
+  useEffect(() => {
     setRouteLoading(true);
     const timeout = setTimeout(() => setRouteLoading(false), 1000);
     return () => clearTimeout(timeout);
@@ -75,7 +93,7 @@ function App() {
       <Routes>
         <Route
           index
-          element={user && user.emailVerified ? <Home /> : <Intro />}
+          element={user && user.emailVerified ? userType === "Donor" ? <Home /> : userType === "NGO" ? <NgoHome /> : <PickupHome /> : <Intro />}
         />
         <Route
           path="/signin"
@@ -123,7 +141,7 @@ function App() {
         <Route
           path="/donate-food"
           element={
-            user && user.emailVerified ? (
+            user && user.emailVerified && userType === "Donor" ? (
               <DonateFood />
             ) : (
               <Navigate to="/" replace />
@@ -133,7 +151,7 @@ function App() {
         <Route
           path="/my-donation"
           element={
-            user && user.emailVerified ? (
+            user && user.emailVerified && userType === "Donor" ? (
               <MyDonation />
             ) : (
               <Navigate to="/" replace />
@@ -145,6 +163,48 @@ function App() {
           element={
             user && user.emailVerified ? (
               <Profile />
+            ) : (
+              <Navigate to="/" replace />
+            )
+          }
+        />
+
+        <Route
+          path="/search-food"
+          element={
+            user && user.emailVerified && userType === "NGO" ? (
+              <SearchFood />
+            ) : (
+              <Navigate to="/" replace />
+            )
+          }
+        />
+        <Route
+          path="/track-request"
+          element={
+            user && user.emailVerified && userType === "NGO" ? (
+              <TrackRequest />
+            ) : (
+              <Navigate to="/" replace />
+            )
+          }
+        />
+
+        <Route
+          path="/pickup-request"
+          element={
+            user && user.emailVerified && userType === "Pickup Person" ? (
+              <PickupRequest />
+            ) : (
+              <Navigate to="/" replace />
+            )
+          }
+        />
+        <Route
+          path="/delivery-history"
+          element={
+            user && user.emailVerified && userType === "Pickup Person" ? (
+              <DeliveryHistory />
             ) : (
               <Navigate to="/" replace />
             )
