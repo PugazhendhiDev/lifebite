@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { UserContext } from "../configuration/userContext";
+import { UserContext } from "../../configuration/userContext";
 import { CircleUserRound } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 import { getAuth, signOut } from 'firebase/auth';

@@ -12,9 +12,11 @@ import ResetPassword from "./auth/resetPassword";
 import EmailSent from "./auth/emailSent";
 import Navbar from "./components/navbar";
 
-import Home from "./pages/home";
+import Home from "./pages/donor/home";
 import Intro from "./pages/intro";
-import Profile from "./pages/profile";
+import Profile from "./pages/donor/profile";
+import DonateFood from "./pages/donor/donateFood";
+import MyDonation from "./pages/donor/myDonation";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -118,6 +120,26 @@ function App() {
           }
         />
 
+        <Route
+          path="/donate-food"
+          element={
+            user && user.emailVerified ? (
+              <DonateFood />
+            ) : (
+              <Navigate to="/" replace />
+            )
+          }
+        />
+        <Route
+          path="/my-donation"
+          element={
+            user && user.emailVerified ? (
+              <MyDonation />
+            ) : (
+              <Navigate to="/" replace />
+            )
+          }
+        />
         <Route
           path="/profile"
           element={
