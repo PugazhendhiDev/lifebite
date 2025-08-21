@@ -1,10 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
+import React, { useState } from "react";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  useMapEvents
+} from "react-leaflet";
 import { Camera, Star, Trophy, ShieldCheck, MapPin } from "lucide-react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-// Fix default marker icon issue in Leaflet
+// Fix default Leaflet marker icon issue
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl:
@@ -13,12 +18,29 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
 });
 
+// Reverse geocoding function
+async function getAddress(lat, lon) {
+  try {
+    const res = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`
+    );
+    const data = await res.json();
+    return data.display_name || "";
+  } catch (err) {
+    console.error(err);
+    return "";
+  }
+}
+
 // Component to select location on map
-function LocationMarker({ position, setPosition }) {
+function LocationMarker({ position, setPosition, setAddress }) {
   useMapEvents({
-    click(e) {
-      setPosition([e.latlng.lat, e.latlng.lng]);
-    },
+    click: async (e) => {
+      const { lat, lng } = e.latlng;
+      setPosition([lat, lng]);
+      const name = await getAddress(lat, lng);
+      setAddress(name);
+    }
   });
 
   return position === null ? null : <Marker position={position}></Marker>;
@@ -31,19 +53,24 @@ function DonateFood() {
   const [preparedAt, setPreparedAt] = useState("");
   const [bestBefore, setBestBefore] = useState("");
   const [position, setPosition] = useState(null); // [lat, lon]
+  const [address, setAddress] = useState(""); // Place name
   const [photo, setPhoto] = useState(null);
 
   const allergenOptions = ["Gluten", "Dairy", "Nuts", "Soy", "Eggs"];
 
-  // Use GPS to auto-fill location
+  // Use GPS to auto-fill location and address
   const useGPS = () => {
     if (!navigator.geolocation) {
       alert("Geolocation is not supported by your browser");
       return;
     }
     navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        setPosition([pos.coords.latitude, pos.coords.longitude]);
+      async (pos) => {
+        const lat = pos.coords.latitude;
+        const lon = pos.coords.longitude;
+        setPosition([lat, lon]);
+        const name = await getAddress(lat, lon);
+        setAddress(name);
       },
       () => {
         alert("Unable to retrieve your location");
@@ -73,7 +100,8 @@ function DonateFood() {
       bestBefore,
       latitude: position[0],
       longitude: position[1],
-      photo,
+      address,
+      photo
     });
     alert("Food listing posted!");
     // reset form
@@ -82,13 +110,16 @@ function DonateFood() {
     setPreparedAt("");
     setBestBefore("");
     setPosition(null);
+    setAddress("");
     setPhoto(null);
   };
 
   return (
     <div className="p-6 bg-gray-50 mb-20 min-h-screen">
       <h1 className="text-3xl font-bold mb-4">Donor Dashboard</h1>
-      <p className="text-gray-600 mb-6">Post surplus food with safety details</p>
+      <p className="text-gray-600 mb-6">
+        Post surplus food with safety details
+      </p>
 
       <div className="grid md:grid-cols-3 gap-6">
         {/* Food Listing Form */}
@@ -161,9 +192,9 @@ function DonateFood() {
               />
             </div>
 
-            {/* Small Map Picker + GPS */}
+            {/* Map Picker */}
             <div className="md:col-span-2 flex flex-col gap-2 relative">
-              <div className="flex justify-between items-center z-20 relative">
+              <div className="flex justify-between items-center relative z-20">
                 <label className="text-sm">Pickup Location</label>
                 <button
                   type="button"
@@ -185,13 +216,18 @@ function DonateFood() {
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution="&copy; OpenStreetMap contributors"
                   />
-                  <LocationMarker position={position} setPosition={setPosition} />
+                  <LocationMarker
+                    position={position}
+                    setPosition={setPosition}
+                    setAddress={setAddress}
+                  />
                 </MapContainer>
               </div>
 
               {position && (
                 <span className="text-sm text-gray-600 relative z-20">
-                  Selected: Lat {position[0].toFixed(4)}, Lon {position[1].toFixed(4)}
+                  Selected: {address} (Lat {position[0].toFixed(4)}, Lon{" "}
+                  {position[1].toFixed(4)})
                 </span>
               )}
             </div>
