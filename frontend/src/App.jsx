@@ -71,7 +71,7 @@ function App() {
     if (userType) {
       setUserType(userType);
     }
-  }, []);
+  }, [location.pathname]);
 
   useEffect(() => {
     setRouteLoading(true);
