@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import Logo from "../assets/vite.svg";
+import Logo from "../assets/logo.png";
 import { ToastContainer, toast } from "react-toastify";
 import PulseLoader from "react-spinners/PulseLoader";
 import { auth } from "../configuration/firebase";
@@ -26,11 +26,11 @@ function ForgotPassword() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-white text-black">
+    <div className="flex justify-center items-center min-h-screen bg-emerald-400 text-black">
       <ToastContainer />
       <form
         onSubmit={handleReset}
-        className="flex flex-col gap-5 justify-center items-center p-4 w-72"
+        className="flex flex-col gap-5 bg-white justify-center items-center p-4 w-72 md:w-80 shadow-md rounded-md"
       >
         <div>
           <img src={Logo} alt="Logo" className="w-24 h-24 rounded-lg" />

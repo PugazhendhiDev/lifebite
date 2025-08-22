@@ -5,8 +5,6 @@ import { auth } from "./configuration/firebase";
 import "./App.css";
 import { ScaleLoader } from "react-spinners";
 
-import Signin from "./auth/signin";
-import Signup from "./auth/signup";
 import ForgotPassword from "./auth/forgotPassword";
 import ResetPassword from "./auth/resetPassword";
 import EmailSent from "./auth/emailSent";
@@ -26,6 +24,7 @@ import TrackRequest from "./pages/ngo/trackRequest";
 import PickupHome from "./pages/pickup/home";
 import PickupRequest from "./pages/pickup/pickupRequest";
 import DeliveryHistory from "./pages/pickup/deliveryHistory";
+import AuthPage from "./auth/authPage";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -96,17 +95,12 @@ function App() {
           element={user && user.emailVerified ? userType === "Donor" ? <Home /> : userType === "NGO" ? <NgoHome /> : <PickupHome /> : <Intro />}
         />
         <Route
-          path="/signin"
+          path="/auth"
           element={
-            user && user.emailVerified ? <Navigate to="/" replace /> : <Signin />
+            user && user.emailVerified ? <Navigate to="/" replace /> : <AuthPage />
           }
         />
-        <Route
-          path="/signup"
-          element={
-            user && user.emailVerified ? <Navigate to="/" replace /> : <Signup />
-          }
-        />
+
         <Route
           path="/forgot-password"
           element={
