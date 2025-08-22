@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import Logo from "../assets/logo.png";
 import { Link } from "react-router-dom";
 import bg from "../assets/bg.png";
-
+import a from "../assets/1.jpg";
+import b from "../assets/2.jpg";
+import c from "../assets/3.jpg";
+import d from "../assets/4.jpg";
+import e from "../assets/5.jpg";
+import f from "../assets/6.jpg";
 
 function Pill({ children }) {
   return (
@@ -100,6 +105,24 @@ function Intro() {
         </div>
       </section>
 
+      <section className="max-w-6xl mx-auto px-4 py-12">
+        <div className="relative w-full h-[500px] flex justify-center items-center overflow-hidden">
+          <div className="flex w-max h-56 gap-4 animate-scroll">
+            {/* Repeat images twice for smooth infinite loop */}
+            {[...Array(2)].map((_, i) => (
+              <>
+                <div className="flex flex-col justify-start items-center w-72 h-80 shadow-md rounded-md overflow-hidden"><img key={`img1-${i}`} src={a} className="w-72 h-56 shadow-md rounded-md" /><h1 className="pt-2 p-4">Taj Hotels (IHCL) crossed 1 million meals distributed to healthcare workers and migrant workers across Mumbai, Bangalore, New Delhi, Coimbatore, and Agra.</h1></div>
+                <div className="flex flex-col justify-start items-center w-72 h-80 shadow-md rounded-md overflow-hidden"><img key={`img1-${i}`} src={b} className="w-72 h-56 shadow-md rounded-md" /><h1 className="pt-2 p-4">Foodlink’s ‘Share a Meal’ campaign launched in Mumbai, providing over 5,000 meals per month to orphanages, homeless communities, and women’s welfare.</h1></div>
+                <div className="flex flex-col justify-start items-center w-72 h-80 shadow-md rounded-md overflow-hidden"><img key={`img1-${i}`} src={d} className="w-72 h-56 shadow-md rounded-md" /><h1 className="pt-2 p-4">No Food Waste (Coimbatore) collects surplus food from weddings and banquets—averaging 600 plates daily—redistributing them to those in need.</h1></div>
+                <div className="flex flex-col justify-start items-center w-72 h-80 shadow-md rounded-md overflow-hidden"><img key={`img1-${i}`} src={c} className="w-72 h-56 shadow-md rounded-md" /><h1 className="pt-2 p-4">SupplyNote’s ‘Feed the Hunger 5.0’ campaign fed over 1,500 underprivileged children through healthy meal packs along with multiple restaurant partners.</h1></div>
+                <div className="flex flex-col justify-start items-center w-72 h-80 shadow-md rounded-md overflow-hidden"><img key={`img1-${i}`} src={e} className="w-72 h-56 shadow-md rounded-md" /><h1 className="pt-2 p-4">AWB Food Bank in Delhi collects excess food from hotels such as The Ashok, ITC Maurya, and The Oberoi scaling from feeding 50 children daily to serving 1,000 children.</h1></div>
+                <div className="flex flex-col justify-start items-center w-72 h-80 shadow-md rounded-md overflow-hidden"><img key={`img1-${i}`} src={f} className="w-72 h-56 shadow-md rounded-md" /><h1 className="pt-2 p-4">Chennai, No Food Waste works with hotels like Savera and others, rescuing banquet leftovers over 2.5 million meals served so far to daily wage workers and slums.</h1></div>
+              </>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Money Donate Section */}
       <section className="max-w-6xl mx-auto px-4 py-12">
         <h2 className="text-xl font-bold text-gray-900 mb-2">Feed the Homeless</h2>
@@ -110,9 +133,8 @@ function Intro() {
           {tiers.map((t) => (
             <div
               key={t.r}
-              className={`p-4 border rounded-2xl ${
-                amount === t.r ? "border-emerald-500" : ""
-              }`}
+              className={`p-4 border rounded-2xl ${amount === t.r ? "border-emerald-500" : ""
+                }`}
             >
               <div className="flex justify-between items-center mb-4">
                 <span className="font-bold">₹ {t.r}</span>
