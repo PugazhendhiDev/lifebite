@@ -106,7 +106,8 @@ function Intro() {
       </section>
 
       <section className="max-w-6xl mx-auto px-4 py-12">
-        <div className="relative w-full h-[500px] flex justify-center items-center overflow-hidden">
+        <h1 className="font-bold text-2xl mb-4">Impact Makers</h1>
+        <div className="relative w-full h-96 flex justify-center items-start overflow-hidden">
           <div className="flex w-max h-56 gap-4 animate-scroll">
             {/* Repeat images twice for smooth infinite loop */}
             {[...Array(2)].map((_, i) => (
